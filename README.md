@@ -14,10 +14,11 @@ This project simulates the spread of an epidemic using the **SIR (Susceptible-In
 
 ## Features
 
-- **Real-time simulation**: Dynamically calculates S, I, R values.
-- **CSV output**: Saves simulation data to `SIR_simulation.csv`.
+- **Real-time simulation**: Dynamically calculates S, I, R values using Euler's method.
+- **CSV output**: Saves simulation data to `output/SIR_Simulation.csv`.
 - **Graphical visualization**: Displays results in a line chart.
-- **User-friendly**: Terminal-based input and output.
+- **Image export**: Option to save the chart as `output/SIR_Simulation.png`.
+- **User-friendly**: Terminal-based input and output with input validation.
 
 ---
 
@@ -80,15 +81,20 @@ This project simulates the spread of an epidemic using the **SIR (Susceptible-In
 ### Step 4: View Results
 
 1. A graph will display the simulation results.
-2. The simulation data will be saved to `output/SIR_simulation.csv`.
+2. The simulation data will be saved to `output/SIR_Simulation.csv`.
+3. You will be prompted to save the chart as a PNG image (`output/SIR_Simulation.png`).
+
 
 ---
 
 ## Output
 
 ### 1. Graph
-
 - A line chart showing the changes in Susceptible, Infected, and Recovered populations over time.
+- Colors:
+  - **Blue**: Susceptible population.
+  - **Red**: Infected population.
+  - **Green**: Recovered population.
 
 ### 2. CSV File
 
@@ -103,16 +109,17 @@ This project simulates the spread of an epidemic using the **SIR (Susceptible-In
 ## Project Structure
 
 ```plaintext
-SIR_Simulation/
-├── src/
-│   └── SIRModel.java
-├── lib/
-│   ├── jfreechart-1.5.3.jar
-│   ├── jcommon-1.0.23.jar
-│   └── commons-csv-1.9.0.jar
-├── output/
-│   └── SIR_simulation.csv
-└── README.md
+SIR_Simulation/  
+├── src/  
+│   └── SIRModel.java  
+├── lib/  
+│   ├── jfreechart-1.5.3.jar  
+│   ├── jcommon-1.0.23.jar  
+│   └── commons-csv-1.9.0.jar  
+├── output/  
+│   ├── SIR_Simulation.csv  
+│   └── SIR_Simulation.png  
+└── README.md  
 
 ```
 
