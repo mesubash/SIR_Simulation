@@ -39,7 +39,7 @@ public class SIRModel {
 
         //CSV file for data storage
         try (FileWriter writer = new FileWriter("output/SIR_Simualation.csv");
-         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("Day", "Susceptible", "Infected", "Recovered"))) {
+             CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.builder().setHeader("Day", "Susceptible", "Infected", "Recovered").build())) {
             //Simulation loop using Euler's method
             for (int t = 0; t < days; t++) {
                 double dS = -beta * S * I * dt;
