@@ -35,7 +35,7 @@ public class SIRModel {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        //User input for parameters
+        // User input for parameters
         System.out.println("=== SIR Model Simulation ===");
         double S = getPositiveDouble(scanner, "Enter initial susceptible population (S): ");
         double I = getPositiveDouble(scanner, "Enter initial infected population (I): ");
@@ -43,17 +43,23 @@ public class SIRModel {
         double beta = getPositiveDouble(scanner, "Enter transmission rate (beta): ");
         double gamma = getPositiveDouble(scanner, "Enter recovery rate (gamma): ");
         double dt = getPositiveDouble(scanner, "Enter time step (dt): ");
-        double days = getPositiveDouble(scanner, "Enter simulation duration(days): ");
+        int days = (int) getPositiveDouble(scanner, "Enter simulation duration (days): ");
 
-        //Data series for plotting 
+        // Data series for plotting
         XYSeries susceptibleSeries = new XYSeries("Susceptible");
         XYSeries infectedSeries = new XYSeries("Infected");
         XYSeries recoveredSeries = new XYSeries("Recovered");
 
-        //CSV file for data storage
-        try (FileWriter writer = new FileWriter("output/SIR_Simualation.csv");
+        // Ensure the output directory exists
+        File outputDir = new File("output");
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
+
+        // CSV file for data storage
+        try (FileWriter writer = new FileWriter("output/SIR_Simulation.csv");
              CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.builder().setHeader("Day", "Susceptible", "Infected", "Recovered").build())) {
-            //Simulation loop using Euler's method
+            // Simulation loop using Euler's method
             for (int t = 0; t < days; t++) {
                 double dS = -beta * S * I * dt;
                 double dI = (beta * S * I - gamma * I) * dt;
@@ -63,26 +69,26 @@ public class SIRModel {
                 I += dI;
                 R += dR;
 
-                //Ensure population values are non-negative
+                // Ensure population values are non-negative
                 S = Math.max(S, 0);
                 I = Math.max(I, 0);
                 R = Math.max(R, 0);
 
-                //Add data to series for plotting
+                // Add data to series for plotting
                 susceptibleSeries.add(t, S);
                 infectedSeries.add(t, I);
                 recoveredSeries.add(t, R);
 
-                //Write data to CSV file
+                // Write data to CSV file
                 csvPrinter.printRecord(t, S, I, R);
             }
-            System.out.println("Simulation completed successfully! Data Saved to SIR_Simulation.csv");
+            System.out.println("Simulation completed successfully! Data saved to SIR_Simulation.csv");
 
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }
 
-        //Plotting the result
+        // Plotting the result
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(susceptibleSeries);
         dataset.addSeries(infectedSeries);
@@ -103,18 +109,19 @@ public class SIRModel {
         ChartFrame frame = new ChartFrame("SIR Model Simulation", chart);
         frame.pack();
         frame.setVisible(true);
+
         System.out.println("Do you want to save the chart as an image file? (y/n)");
         String response = scanner.next();
-        if (!response.equalsIgnoreCase("y")) {
-            return;
+        if (response.equalsIgnoreCase("y")) {
+            // Save the chart as an image file
+            try {
+                ChartUtils.saveChartAsPNG(new File("output/SIR_Simulation.png"), chart, 800, 600);
+                System.out.println("Chart saved as output/SIR_Simulation.png");
+            } catch (IOException e) {
+                System.err.println("Error saving chart as image: " + e.getMessage());
+            }
         }
 
-        // Save the chart as an image file
-        try {
-            ChartUtils.saveChartAsPNG(new File("output/SIR_Simulation.png"), chart, 800, 600);
-            System.out.println("Chart saved as output/SIR_Simulation.png");
-        } catch (IOException e) {
-            System.err.println("Error saving chart as image: " + e.getMessage());
-        }
+        scanner.close();
     }
 }
